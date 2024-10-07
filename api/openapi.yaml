@@ -1,0 +1,318 @@
+openapi: 3.0.1
+info:
+  contact:
+    email: marvkaay@gmail.com
+    name: Kaaya Marvin
+  description: APIs for staff onboarding and management
+  title: dfcu Bank HR Management System API
+  version: 1.0.0
+servers:
+- description: SwaggerHub API Auto Mocking
+  url: https://virtserver.swaggerhub.com/MARVKAAY/DFCU/1.0.0
+- description: Development URL
+  url: https://localhost:8000/api
+security:
+- bearerToken: []
+paths:
+  /staff/register:
+    post:
+      operationId: registerStaff
+      requestBody:
+        content:
+          multipart/form-data:
+            examples:
+              Example 1:
+                value:
+                  surname: Doe
+                  other_names: John
+                  dob: 1980-01-01
+                  id_photo: base64encodedphoto
+            schema:
+              $ref: '#/components/schemas/staff_register_body'
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Staff'
+          description: Staff registered successfully
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+        "404":
+          description: Not Found
+        "405":
+          description: Method Not Allowed
+      summary: Register a new staff member
+      x-eov-operation-handler: controllers/DefaultController
+  /staff/get:
+    get:
+      operationId: getStaffDetails
+      parameters:
+      - explode: true
+        in: query
+        name: employee_number
+        required: true
+        schema:
+          example: EMP08755
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+          description: Staff retrieved successfully
+        "401":
+          description: Unauthorized
+        "404":
+          description: Employee not found
+      summary: Retrieve staff details
+      x-eov-operation-handler: controllers/DefaultController
+  /staff/update:
+    put:
+      operationId: updateStaff
+      requestBody:
+        content:
+          multipart/form-data:
+            examples:
+              Example 1:
+                value:
+                  employee_number: "1090097645"
+                  dob: 1980-01-01
+                  photo: base64encodedphoto
+            schema:
+              $ref: '#/components/schemas/staff_update_body'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Staff'
+          description: Staff updated successfully
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+        "404":
+          description: Not Found
+      summary: Update staff member information
+      x-eov-operation-handler: controllers/DefaultController
+  /auth/register:
+    post:
+      operationId: userRegistration
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/auth_register_body'
+      responses:
+        "200":
+          description: Registration Successful
+        "400":
+          description: Bad Request
+      summary: User registration
+      x-eov-operation-handler: controllers/DefaultController
+  /auth/login:
+    post:
+      operationId: userLogin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/auth_login_body'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_1'
+          description: Login Successful
+        "401":
+          description: Unauthorized
+      summary: User login
+      x-eov-operation-handler: controllers/DefaultController
+  /staff/generate_code:
+    post:
+      operationId: generateAuthCode
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/staff_generate_code_body'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_2'
+          description: Code generated
+      summary: Generate auth code
+      x-eov-operation-handler: controllers/DefaultController
+components:
+  schemas:
+    Staff:
+      description: Database schema for staff
+      example:
+        updated_at: 2000-01-23T04:56:07.000+00:00
+        surname: surname
+        dob: 2000-01-23
+        created_at: 2000-01-23T04:56:07.000+00:00
+        employee_number: employee_number
+        other_names: other_names
+        id: 0
+        id_photo: ""
+      properties:
+        id:
+          type: integer
+        surname:
+          type: string
+        other_names:
+          type: string
+        dob:
+          format: date
+          type: string
+        id_photo:
+          format: binary
+          type: string
+        created_at:
+          format: date-time
+          type: string
+        updated_at:
+          format: date-time
+          type: string
+        employee_number:
+          type: string
+      type: object
+    User:
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        created_at:
+          format: date-time
+          type: string
+        updated_at:
+          type: string
+      type: object
+    staff_register_body:
+      properties:
+        surname:
+          type: string
+        other_names:
+          type: string
+        dob:
+          format: date
+          type: string
+        id_photo:
+          format: binary
+          type: string
+      required:
+      - dob
+      - other_names
+      - surname
+      type: object
+    inline_response_200:
+      example:
+        staff:
+          updated_at: 2000-01-23T04:56:07.000+00:00
+          surname: surname
+          dob: 2000-01-23
+          created_at: 2000-01-23T04:56:07.000+00:00
+          employee_number: employee_number
+          other_names: other_names
+          id: 0
+          id_photo: ""
+        status: success
+      properties:
+        status:
+          example: success
+          type: string
+        staff:
+          $ref: '#/components/schemas/Staff'
+      type: object
+    staff_update_body:
+      properties:
+        employee_number:
+          type: string
+        dob:
+          format: date
+          type: string
+        photo:
+          format: binary
+          type: string
+      type: object
+    auth_register_body:
+      properties:
+        name:
+          type: string
+        email:
+          format: email
+          type: string
+        password:
+          type: string
+        username:
+          type: string
+        role:
+          type: string
+      required:
+      - email
+      - name
+      - password
+      type: object
+    auth_login_body:
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      required:
+      - email
+      - password
+      type: object
+    inline_response_200_1:
+      example:
+        access_token: access_token
+        token_type: token_type
+        user: user
+        expires_in: 0
+      properties:
+        user:
+          type: string
+        access_token:
+          type: string
+        token_type:
+          type: string
+        expires_in:
+          type: integer
+      type: object
+    staff_generate_code_body:
+      properties:
+        email:
+          format: email
+          type: string
+      type: object
+    inline_response_200_2:
+      example:
+        code: code
+        message: message
+        status: true
+      properties:
+        status:
+          type: boolean
+        message:
+          type: string
+        code:
+          type: string
+      type: object
+  securitySchemes:
+    bearerToken:
+      scheme: bearer
+      type: http
