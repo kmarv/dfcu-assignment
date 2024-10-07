@@ -93,6 +93,11 @@ run migrations:
 php artisan migrate
 ```
 
+run seeder 
+```bash 
+php artisan db:seed
+```
+
 #### Step 7: Start the Local Development Server
 
 You can start the built-in Laravel development server using:
@@ -127,6 +132,10 @@ go to
 ```url 
  http://127.0.0.1:8000/pulseLogin
  ```
+
+ the credentials are
+ username : admin
+ password : password
 
 ### Conclusion
 Following these steps, you should have your Laravel 11 application running locally. Adjust any steps as needed based on your application’s specific requirements. If you have any issues, feel free to ask for help!
