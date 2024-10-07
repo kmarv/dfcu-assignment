@@ -48,7 +48,7 @@ npm start
 By default, this will start the server at `http://localhost:3000`. You can view your application in your web browser at this address.
 ### login details 
 email : admin@gmail.com
-password : passwoed
+password : password
 #### Step 5: Building the Application for Production (Optional)
 
 If you need to create a production build of your application, you can use the following command:
