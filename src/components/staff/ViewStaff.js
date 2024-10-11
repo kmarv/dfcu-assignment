@@ -7,8 +7,10 @@ import { Button, Space, Table, Input } from "antd";
 import moment from "moment"; // for calculating age
 import ViewModal from "./ViewModal";
 import UpdateModal from "./UpdateModal";
+import { useNavigate } from "react-router-dom";
 
 function ViewStaff() {
+  const navigate = useNavigate();
   const [staff, setStaff] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedStaff, setSelectedStaff] = useState(null);
@@ -149,6 +151,9 @@ setOpenUpdateModal(true)
             </Button>
             <Button type="primary" className="m-2" onClick={handleReset}>
               Reset
+            </Button>
+            <Button type="danger" onClick={() => navigate("/staff/register")}>
+              Add Staff
             </Button>
           </div>
 
